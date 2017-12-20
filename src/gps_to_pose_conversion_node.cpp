@@ -4,6 +4,10 @@
   Otherwise, altitude from GPS is taken
 */
 
+#include <fstream>
+#include <iostream>
+#include <ros/package.h>
+
 #include <ros/ros.h>
 #include <sensor_msgs/Imu.h>
 #include <sensor_msgs/NavSatFix.h>
@@ -13,6 +17,11 @@
 #include <geodetic_utils/geodetic_conv.hpp>
 #include <std_msgs/Float64.h>
 #include <tf/transform_broadcaster.h>
+
+
+// Store the results
+std::string path = ros::package::getPath("geodetic_utils");
+static std::ofstream fGpsResults(path+"/result/gps_xyz.dat");
 
 bool g_is_sim;
 bool g_publish_pose;
@@ -96,6 +105,10 @@ void gps_callback(const sensor_msgs::NavSatFixConstPtr& msg)
   position_msg->header = pose_msg->header;
   position_msg->header.frame_id = g_frame_id;
   position_msg->point = pose_msg->pose.pose.position;
+
+  // Record the gps position to file !!!
+  //fGpsResults << std::setprecision(19) << x << " " << y << " " << z << "\n";
+  //fGpsResults.flush();
 
   // If external altitude messages received, include in pose and position messages
   if (g_got_altitude) {

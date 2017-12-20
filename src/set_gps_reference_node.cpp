@@ -80,7 +80,7 @@ void gps_callback(const sensor_msgs::NavSatFixConstPtr & msg)
 int main(int argc, char** argv)
 {
 
-  ros::init(argc, argv, "set_gps_reference");
+  ros::init(argc, argv, "set_gps_reference_node");
   ros::NodeHandle nh;
 
   nh.setParam("/gps_ref_is_init", false);
